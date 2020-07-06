@@ -11,8 +11,8 @@ class TestCSFGraph(TestCase):
         data_dir = os.path.join(os.path.dirname( __file__), 'data')
 
         # files for canonical test graph
-        self.edge_file = os.path.join(data_dir, 'small_graph_all_genes_edges.txt')
-        self.node_file = os.path.join(data_dir, 'small_graph_all_genes_nodes.txt')
+        self.edge_file = os.path.join(data_dir, 'small_graph_all_genes_edges.tsv')
+        self.node_file = os.path.join(data_dir, 'small_graph_all_genes_nodes.tsv')
         g = CSFGraph(edge_file=self.edge_file)
         self.g = g
         str(g)

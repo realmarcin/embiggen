@@ -1,8 +1,0 @@
-id  name    category
-g1	gene1	gene
-g2	gene2	gene
-g3	gene3	gene
-g4	gene4	gene
-g5	gene5	gene
-g6	gene6	gene
-
