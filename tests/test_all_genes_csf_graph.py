@@ -103,3 +103,12 @@ class TestCSFGraph(TestCase):
         # print(nbrs)
         self.assertEqual(['g1', 'g3', 'g4', 'g5', 'g6'], nbrs)
         return None
+
+    def test_degree(self):
+        #test the degrees of nodes
+        node_1 = "g1"
+        node_2 = "g2"
+        node_3 = "g4"
+        self.assertEqual(4, self.g.node_degree(node_1))
+        self.assertEqual(5, self.g.node_degree(node_2))
+        self.assertEqual(2, self.g.node_degree(node_3))
