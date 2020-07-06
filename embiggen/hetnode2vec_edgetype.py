@@ -278,46 +278,29 @@ class N2vGraph:
         return self.__alias_setup(normalized_probs)
 
 
-    def __preprocess_transition_probs_xn2v_edgetype(self, num_processes=8) -> None:
-            """Preprocessing of transition probabilities for guiding the random walks.
-
-            Args:
-                num_processes: The number of processes to run.
+    def __preprocess_transition_probs_xn2v_edgetype(self) -> None:
+            """Preprocessing of transition probabilities for guiding the random walks. This version uses gamma to
+            calculate weighted skipping across a heterogeneous network.
 
             Returns:
                 None.
             """
-            g = self.g
-
-            alias_nodes = {}
-            num_nodes = len(g.nodes_as_integers())  # for progress updates
-
-            with Pool(processes=num_processes) as pool:
-                for i, [orig_node, alias_node] in enumerate(
-                        pool.imap_unordered(self._get_alias_node, g.nodes_as_integers())):
-                    alias_nodes[orig_node] = alias_node
-                    sys.stderr.write('\rmaking alias nodes ({:03.1f}% done)'.
-                                     format(100 * i / num_nodes))
-
-            sys.stderr.write("\rDone making alias nodes.\n")
-
+            G = self.g
             alias_edges = {}
+            alias_nodes = {}
+            for node in G.nodes():
+                unnormalized_probs = [G.weight(node)(nbr) for nbr in sorted(G.neighbors(node))]
+                norm_const = sum(unnormalized_probs)
+                normalized_probs = [float(u_prob) / norm_const for u_prob in unnormalized_probs]
+                alias_nodes[node] = self.__alias_setup(normalized_probs)
+            for edge in G.edges():
+                # src_as_int = G.node_to_index_map[edge[0]]
+                # dst_as_int = G.node_to_index_map[edge[1]]
+                # alias_edges[(src_as_int, dst_as_int)] = self.get_alias_edge_xn2v(edge[0], edge[1])
+                alias_edges[(edge[0], edge[1])] = self.get_alias_edge_xn2v_edgetype(edge[0], edge[1])
 
-            # Note that g.edges returns two directed edges to represent an undirected edge
-            # between any two nodes.  We do not need to create any additional edges for the
-            # random walk as in the Stanford implementation
-            num_edges = len(g.edges())  # for progress updates
-
-            with Pool(processes=num_processes) as pool:
-                for i, [orig_edge, alias_edge] in enumerate(
-                        pool.imap_unordered(self.get_alias_edge_xn2v_edgetype, g.edges_as_ints())):
-                    alias_edges[orig_edge] = alias_edge
-                    sys.stderr.write('\rmaking alias edges ({:03.1f}% done)'.
-                                     format(100 * i / num_edges))
-            sys.stderr.write("\rDone making alias edges.\n")
-
-            self.alias_nodes = alias_nodes
             self.alias_edges = alias_edges
+            self.alias_nodes = alias_nodes
 
             return None
 
