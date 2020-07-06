@@ -21,7 +21,6 @@ language: python
 python:
 - '3.7'
 before_install:
-- ldd  --version
 - pip install pip --upgrade
 - pip install setuptools --upgrade 
 - pip uninstall -y numpy
