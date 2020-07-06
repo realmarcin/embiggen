@@ -112,3 +112,24 @@ class TestCSFGraph(TestCase):
         self.assertEqual(4, self.g.node_degree(node_1))
         self.assertEqual(5, self.g.node_degree(node_2))
         self.assertEqual(2, self.g.node_degree(node_3))
+
+    def test_edge_type_1(self):
+        node_1 = "g1"
+        node_2 = "g3"
+        edge_type = self.g.edgetype(node_1, node_2)
+        expected = "1"
+        self.assertEqual(expected,edge_type)
+
+    def test_edge_type_2(self):
+        node_1 = "g1"
+        node_2 = "g5"
+        edge_type = self.g.edgetype(node_1, node_2)
+        expected = "3"
+        self.assertEqual(expected,edge_type)
+
+    def test_edge_type_3(self):
+        node_1 = "g2"
+        node_2 = "g6"
+        edge_type = self.g.edgetype(node_1, node_2)
+        expected = "3"
+        self.assertEqual(expected,edge_type)
