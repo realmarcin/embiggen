@@ -1,8 +1,18 @@
-dist: xenial
+dist: bionic
 sudo: false
 git:
   depth: false
 addons:
+  apt:
+    packages:
+      - libiberty-dev
+      - zlib1g-dev
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - binutils-dev
+      - gcc
+      - cmake # also required for cargo-update
   sonarcloud:
     organization: "monarch-initiative"
     token:
