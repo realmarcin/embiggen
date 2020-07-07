@@ -91,3 +91,22 @@ class TestHetGraph(TestCase):
         self.assertAlmostEqual(2.5/12, original_probs[0])
         self.assertAlmostEqual(3.5/12, original_probs[1])
         self.assertAlmostEqual(6/12, original_probs[2])
+
+    def test_raw_probs_4(self):
+        p = 1
+        q = 1
+        gamma = 1
+        g = N2vGraph(self.graph, p, q, gamma, doxn2v=True)
+        src = 'g1'
+        dst = 'g5'
+        [j_alias, q_alias] = g.get_alias_edge_xn2v_edgetype(src, dst)
+        self.assertEqual(len(j_alias), len(q_alias))
+        # outgoing edges from g5:  g1, g2, g3. g5 <-> g1 of type 3 and weight 8, g5 <->g2 of type 2 and weight 11,
+        # g5 <-> g3 of type 3 and weight 12
+
+        self.assertEqual(3, len(j_alias))
+        # recreate the original probabilities.
+        original_probs = calculate_total_probs(j_alias, q_alias)
+        self.assertAlmostEqual(4/21, original_probs[0])
+        self.assertAlmostEqual(11/21, original_probs[1])
+        self.assertAlmostEqual(6/21, original_probs[2])
