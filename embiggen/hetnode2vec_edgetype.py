@@ -231,8 +231,8 @@ class N2vGraph:
             #nbrtype = self._node_id_to_node_type(nbr)
             # dst2count[nbrtype] += 1
             nbr_edgetype = self.g.edgetype(dst, nbr)
-            nbr_edgetype_id = self.g.edgetype_to_index_map[nbr_edgetype]
-            dst2count[nbr_edgetype_id] += 1
+            #nbr_edgetype_id = self.g.edgetype_to_index_map[nbr_edgetype]
+            dst2count[nbr_edgetype] += 1
             total_neighbors += 1
         total_non_own_probability = 0.0
         num_types = 0
@@ -263,8 +263,8 @@ class N2vGraph:
             #nbrtype = self._node_id_to_node_type(dst_nbr)
             #prob = dst2prob[nbrtype]
             nbr_edge_type = self.g.edgetype(dst, dst_nbr)
-            nbr_edge_type_id = self.g.edgetype_to_index_map[nbr_edge_type]
-            prob = dst2prob[nbr_edge_type_id]
+            #nbr_edge_type_id = self.g.edgetype_to_index_map[nbr_edge_type]
+            prob = dst2prob[nbr_edge_type]
             edge_weight = g.weight(dst, dst_nbr)
             if dst_nbr == src:
                 unnormalized_probs[i] = prob * edge_weight / p
@@ -289,7 +289,7 @@ class N2vGraph:
             alias_edges = {}
             alias_nodes = {}
             for node in G.nodes():
-                unnormalized_probs = [G.weight(node)(nbr) for nbr in sorted(G.neighbors(node))]
+                unnormalized_probs = [G.weight(node, nbr) for nbr in sorted(G.neighbors(node))]
                 norm_const = sum(unnormalized_probs)
                 normalized_probs = [float(u_prob) / norm_const for u_prob in unnormalized_probs]
                 alias_nodes[node] = self.__alias_setup(normalized_probs)
